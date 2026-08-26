@@ -21,8 +21,8 @@ class CarService:
         return self.cars
 
 
-    def update_car(self, car):
-        def update_car(
+
+    def update_car(
                 self,
                 car_id,
                 model=None,
@@ -62,7 +62,7 @@ class CarService:
         ]
 
 
-    def remoe_car_by_id(self, car_id):
+    def remove_car_by_id(self, car_id):
         car = self.get_car(car_id)
 
         if car is None:
