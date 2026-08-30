@@ -1,10 +1,10 @@
 import pytest
-from sqlalchemy import create_engine, text, delete
+from sqlalchemy import create_engine, delete
 from sqlmodel import SQLModel, Session
 
-from app.models.car import Car
-from app.models.rental import Rental
-from app.models.user import User
+from app.schemas.models.car import Car
+from app.schemas.models.rental import Rental
+from app.schemas.models.user import User
 
 TEST_DATABASE_URL : str = 'sqlite:///./test.db'
 

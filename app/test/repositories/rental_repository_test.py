@@ -7,14 +7,14 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.sql.expression import text
 from sqlmodel import Session
 
-from app.models.car import Car
-from app.models.car_brand import CarBrand
-from app.models.car_model import CarModel
-from app.models.car_state import CarState
-from app.models.release_year import ReleaseYear
-from app.models.rental import Rental
-from app.models.role import Role
-from app.models.user import User
+from app.schemas.models.car import Car
+from app.schemas.models.enums.car_brand import CarBrand
+from app.schemas.models.enums.car_model import CarModel
+from app.schemas.models.enums.car_state import CarState
+from app.schemas.models.enums.release_year import ReleaseYear
+from app.schemas.models.rental import Rental
+from app.schemas.models.enums.role import Role
+from app.schemas.models.user import User
 from app.repositories.car_repository import CarRepository
 from app.repositories.rental_repository import RentalRepository
 from app.repositories.user_repository import UserRepository
@@ -47,12 +47,12 @@ class TestRentalRepository:
 
         return car,user
 
-    def test_empty_repository(self,session: Session,):
+    def test_empty_repository(self,session: Session):
         rental_repository = RentalRepository(session=session)
 
         assert rental_repository is not None
 
-    def test_save_rental_count_is_one(self,session: Session,setup_dependencies):
+    def test_save_rental_count_is_one(self,session: Session,setup_dependencies : tuple):
 
         car,user = setup_dependencies
         rental_repository = RentalRepository(session=session)
@@ -73,7 +73,7 @@ class TestRentalRepository:
 
         assert rental_repository.count() == 1
 
-    def test_save_rental_missing_car_foreign_key_raises_error(self,session: Session,setup_dependencies):
+    def test_save_rental_missing_car_foreign_key_raises_error(self,session: Session,setup_dependencies : tuple):
         session.exec(text("PRAGMA foreign_keys=ON"))
         _,user = setup_dependencies
         rental_repository = RentalRepository(session=session)
@@ -92,7 +92,7 @@ class TestRentalRepository:
         with pytest.raises(IntegrityError):
             rental_repository.save(rental)
 
-    def test_find_all_active_rentals(self,session: Session,setup_dependencies):
+    def test_find_all_active_rentals(self,session: Session,setup_dependencies : tuple):
             car, user = setup_dependencies
             rental_repository = RentalRepository(session=session)
 
@@ -126,8 +126,3 @@ class TestRentalRepository:
 
             assert rental_repository.count() == 2
             assert len(rental_repository.find_active()) == 2
-
-
-
-
-
