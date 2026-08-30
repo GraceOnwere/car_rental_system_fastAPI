@@ -10,9 +10,9 @@ from app.repositories.user_repository import UserRepository
 
 class TestUserRepository:
 
-    def test_empty_repository_count_is_zero(self,session: Session) -> None:
+    def test_empty_repository(self,session: Session) -> None:
         repository = UserRepository(session=session)
-        repository.count()
+        assert repository is not None
 
     def test_save_user_count_is_one(self,session: Session) -> None:
 

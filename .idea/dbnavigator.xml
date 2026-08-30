@@ -74,7 +74,9 @@
   </component>
   <component name="DBNavigator.Project.DatabaseFileManager">
     <open-files>
+      <object connection-id="a1f69c95-cfd4-46c9-b3f1-b9b3558004ae" object-ref="schemas/test/tables/car" />
       <object connection-id="a1f69c95-cfd4-46c9-b3f1-b9b3558004ae" object-ref="schemas/test/tables/user" />
+      <object connection-id="a1f69c95-cfd4-46c9-b3f1-b9b3558004ae" object-ref="schemas/test/tables/rental" />
     </open-files>
   </component>
   <component name="DBNavigator.Project.DatabasePrerequisiteManager">
@@ -85,6 +87,8 @@
   </component>
   <component name="DBNavigator.Project.DatasetFilterManager">
     <filter-actions connection-id="a1f69c95-cfd4-46c9-b3f1-b9b3558004ae" dataset="test.user" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="a1f69c95-cfd4-46c9-b3f1-b9b3558004ae" dataset="test.rental" active-filter-id="EMPTY_FILTER" />
+    <filter-actions connection-id="a1f69c95-cfd4-46c9-b3f1-b9b3558004ae" dataset="test.car" active-filter-id="EMPTY_FILTER" />
   </component>
   <component name="DBNavigator.Project.ExecutionManager">
     <retain-sticky-names value="false" />
