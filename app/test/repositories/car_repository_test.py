@@ -4,22 +4,24 @@ import pytest
 from sqlalchemy.exc import IntegrityError
 from sqlmodel import Session
 
-from app.models.car import Car
-from app.models.car_brand import CarBrand
-from app.models.car_model import CarModel
-from app.models.car_state import CarState
-from app.models.release_year import ReleaseYear
+from app.schemas.models.car import Car
+from app.schemas.models.enums.car_brand import CarBrand
+from app.schemas.models.enums.car_model import CarModel
+from app.schemas.models.enums.car_state import CarState
+from app.schemas.models.enums.release_year import ReleaseYear
 from app.repositories.car_repository import CarRepository
 
 class TestCarRepository:
 
-    def test_empty_repository(self,session: Session):
-        repository = CarRepository(session=session)
+    @pytest.fixture
+    def repository(self, session:Session) -> CarRepository:
+        return CarRepository(session=session)
+
+    def test_empty_repository(self,session: Session,repository):
 
         assert repository is not None
 
-    def test_save_car_count_is_one(self,session: Session):
-        repository = CarRepository(session=session)
+    def test_save_car_count_is_one(self,repository: CarRepository):
 
         car = Car()
         car.brand = CarBrand.TOYOTA
@@ -32,8 +34,7 @@ class TestCarRepository:
 
         assert repository.count() == 1
 
-    def test_save_two_cars_count_is_two(self,session: Session):
-        repository = CarRepository(session=session)
+    def test_save_two_cars_count_is_two(self,repository : CarRepository):
 
         car = Car()
         car.brand = CarBrand.LEXUS
@@ -52,8 +53,7 @@ class TestCarRepository:
         repository.save(car_two)
         assert repository.count() == 2
 
-    def test_save_car_with_duplicate_plate_number_raises_error(self,session: Session):
-        repository = CarRepository(session=session)
+    def test_save_car_with_duplicate_plate_number_raises_error(self,repository : CarRepository):
 
         car = Car()
         car.brand = CarBrand.TOYOTA
@@ -74,9 +74,7 @@ class TestCarRepository:
         with pytest.raises(IntegrityError):
             repository.save(car_two)
 
-    def test_save_car_with_missing_required_fields_raises_integrity_error(self,session: Session):
-        repository = CarRepository(session=session)
-
+    def test_save_car_with_missing_required_fields_raises_integrity_error(self,repository : CarRepository):
         car = Car()
         car.brand = CarBrand.LEXUS
         car.model = CarModel.RX350
@@ -84,8 +82,7 @@ class TestCarRepository:
         with pytest.raises(IntegrityError):
             repository.save(car)
 
-    def test_find_by_id_returns_valid_car(self,session: Session):
-        repository = CarRepository(session=session)
+    def test_find_by_id_returns_valid_car(self,repository):
 
         car = Car()
         car.brand = CarBrand.LEXUS
@@ -98,15 +95,13 @@ class TestCarRepository:
 
         assert repository.find_by_id(car.id) == car
 
-    def test_find_by_id_returns_none(self,session: Session):
-        repository = CarRepository(session=session)
+    def test_find_by_id_returns_none(self,session: Session,repository : CarRepository):
 
         fake_id = uuid.uuid4()
 
         assert repository.find_by_id(fake_id) is None
 
-    def test_delete_by_id_returns_true(self,session: Session):
-        repository = CarRepository(session=session)
+    def test_delete_by_id_returns_true(self,repository : CarRepository):
 
         car = Car()
         car.brand = CarBrand.LEXUS
@@ -120,15 +115,13 @@ class TestCarRepository:
         assert repository.delete_by_id(car.id) is True
         assert repository.count() == 0
 
-    def test_delete_non_existent_id_returns_false(self,session: Session) -> None:
-        repository = CarRepository(session=session)
+    def test_delete_non_existent_id_returns_false(self,repository : CarRepository) -> None:
 
         fake_id = (uuid.uuid4())
 
         assert repository.delete_by_id(fake_id) is False
 
-    def test_save_two_cars_delete_one_count_is_one(self,session: Session):
-        repository = CarRepository(session=session)
+    def test_save_two_cars_delete_one_count_is_one(self,repository: CarRepository):
 
         car = Car()
         car.brand = CarBrand.LEXUS
@@ -149,8 +142,7 @@ class TestCarRepository:
         repository.delete_by_id(car.id)
         assert repository.count() == 1
 
-    def test_find_by_brand(self,session: Session):
-        repository = CarRepository(session=session)
+    def test_find_by_brand(self, repository : CarRepository):
 
         car = Car()
         car.brand = CarBrand.TOYOTA

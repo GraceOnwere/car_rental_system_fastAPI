@@ -1,8 +1,8 @@
 from uuid import UUID
 
 from sqlmodel import Session, select
-from app.models.car import Car
-from app.models.car_brand import CarBrand
+from app.schemas.models.car import Car
+from app.schemas.models.enums.car_brand import CarBrand
 
 class CarRepository:
     def __init__(self, session: Session):
