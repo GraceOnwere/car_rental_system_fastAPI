@@ -22,7 +22,7 @@ class UserRepository:
         statement = select(User)
         return self._session.exec(statement).all()
 
-    def delete_by_id(self,user_id: UUID):
+    def delete_by_id(self,user_id: UUID) -> bool:
         user = self.find_by_id(user_id)
 
         if user is not None:
@@ -31,10 +31,12 @@ class UserRepository:
             return True
         return False
 
-    def update_by_id(self,user_id: UUID,update_data: dict):
+    def update_by_id(self,user_id: UUID,request_dto: UpdateUserRequest):
         user = self.find_by_id(user_id)
         if user is None:
             return None
+
+        update_data = request_dto.model_dump(exclude_unset=True)
 
         for key, value in update_data.items():
             setattr(user, key, value)
