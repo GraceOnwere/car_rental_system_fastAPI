@@ -1,4 +1,3 @@
-from app.models import role
 from app.models.role import Role
 from app.models.user import User
 
