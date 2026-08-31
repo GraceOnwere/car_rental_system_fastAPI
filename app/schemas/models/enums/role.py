@@ -1,6 +1,6 @@
-from enum import Enum, auto
+from enum import StrEnum, auto
 
-class Role(Enum):
+class Role(StrEnum):
     FLEET_MANAGER = auto()
     FRONT_DESK = auto()
     ADMIN = auto()

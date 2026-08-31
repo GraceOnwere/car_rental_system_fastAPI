@@ -50,3 +50,10 @@ class UserRepository:
         users = self.find_all()
         return len(users)
 
+    def find_by_username(self,username: str):
+        statement = select(User).where(User.username == username)
+        return self._session.exec(statement).one_or_none()
+
+    def find_by_email(self,email: str):
+        statement = select(User).where(User.email == email)
+        return self._session.exec(statement).one_or_none()

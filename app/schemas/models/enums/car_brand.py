@@ -1,6 +1,7 @@
-from enum import Enum, auto
+from enum import  auto, StrEnum
 
-class CarBrand(Enum):
+
+class CarBrand(StrEnum):
     TOYOTA = auto()
     HONDA = auto()
     LEXUS = auto()

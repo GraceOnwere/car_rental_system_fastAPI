@@ -1,6 +1,6 @@
-from enum import Enum, auto
+from enum import StrEnum, auto
 
-class CarModel(Enum):
+class CarModel(StrEnum):
     CIVIC = auto()
     COROLLA = auto()
     CAMRY = auto()
