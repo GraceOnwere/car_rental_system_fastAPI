@@ -1,6 +1,6 @@
-from enum import Enum ,auto
+from enum import StrEnum ,auto
 
-class CarState(Enum):
+class CarState(StrEnum):
     AVAILABLE = auto()
     RENTED = auto()
     MAINTENANCE =auto()

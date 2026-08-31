@@ -1,0 +1,79 @@
+from app.exceptions.user_excepton import UsernameAlreadyExistsException, EmailAlreadyExistsException, \
+    InvalidCredentialsException
+from app.repositories.user_repository import UserRepository
+from app.schemas.models.user import User
+from app.schemas.requests.logout_request import LogoutUserRequest
+from app.schemas.requests.register_request import RegisterUserRequest
+from app.schemas.requests.login_request import LoginUserRequest
+from app.schemas.responses.logout_response import LogoutUserResponse
+from app.schemas.responses.register_response import RegisterUserResponse
+from app.schemas.responses.login_reponse import LoginUserResponse
+
+class AuthServices:
+    def __init__(self, repository : UserRepository):
+        self._user_repository = repository
+
+    def register(self, request_data: RegisterUserRequest) -> RegisterUserResponse:
+        existing_username = self._user_repository.find_by_username(request_data.username)
+        existing_email = self._user_repository.find_by_email(request_data.email)
+
+        if existing_username:
+            raise UsernameAlreadyExistsException()
+
+        if existing_email:
+            raise EmailAlreadyExistsException()
+
+
+        user = User(
+            username=request_data.username,
+            full_name=request_data.full_name,
+            email=request_data.email,
+            password=request_data.password,
+            role=request_data.role
+        )
+
+        new_user = self._user_repository.save(user)
+
+        response = RegisterUserResponse(
+            user_id=new_user.id,
+            username=new_user.username,
+            email=new_user.email,
+            role=new_user.role,
+            message='Registered successfully'
+        )
+
+        return response
+
+
+    def login(self,login_user_request: LoginUserRequest ) -> LoginUserResponse:
+        existing_user = self._user_repository.find_by_username(login_user_request.username)
+
+        if not existing_user:
+            raise InvalidCredentialsException()
+
+        if login_user_request.password != existing_user.password:
+            raise InvalidCredentialsException()
+        else:
+            existing_user.is_logged_in = True
+            self._user_repository.save(existing_user)
+
+        login_user_response = LoginUserResponse(
+            username=existing_user.username,
+            logged_in=existing_user.is_logged_in
+        )
+        return login_user_response
+
+    def logout(self,logout_request: LogoutUserRequest) -> LogoutUserResponse:
+        existing_user = self._user_repository.find_by_username(logout_request.username)
+
+        if not existing_user:
+            raise InvalidCredentialsException()
+
+        existing_user.is_logged_in = False
+        self._user_repository.save(existing_user)
+
+        logout_response = LogoutUserResponse(
+            message='Logged out successfully'
+        )
+
+        return logout_response

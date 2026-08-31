@@ -1,6 +1,6 @@
-from enum import Enum, auto
+from enum import IntEnum
 
-class ReleaseYear(Enum):
+class ReleaseYear(IntEnum):
     YEAR_2010 = 2010
     YEAR_2011 = 2011
     YEAR_2012 = 2012
